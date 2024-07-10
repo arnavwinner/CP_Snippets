@@ -3,6 +3,7 @@
 
 #include <bits/stdc++.h>
 using namespace std;
+
 // assuming mod is defined at the top
 const int mod = 1E9 + 7;
 
@@ -25,14 +26,14 @@ int bin_power(int b, int e) {
   b_ %= mod;
   b = b_;
   return b;
-}
+} // working
 
 void mod_add(int &a, int b) {
   long long a_ = a;
   a_ += b;
   a_ %= mod;
   a = a_;
-}
+} // working
 
 void mul_mod(int &a, int b) {
   long long a_ = a;
