@@ -28,7 +28,7 @@ int bin_power(int b, int e) {
   return b;
 } // working
 
-void mod_add(int &a, int b) {
+void add_mod(int &a, int b) {
   long long a_ = a;
   a_ += b;
   a_ %= mod;
