@@ -1,66 +1,83 @@
-
 // author: arnavwinner
 
 #include <bits/stdc++.h>
 using namespace std;
 
-// assuming mod is defined at the top
-const int mod = 1E9 + 7;
+struct ModInt {
+  int value;
+  static int mod;
 
-int bin_power(int b, int e) {
-  if (e == 0) return 1;
-  long long b_ = b;
-  long long ans = 1;
-  while (e > 1) {
-    if (e % 2 == 0) {
-      e /= 2;
-      b_ *= b_;
-      b_ %= mod;
-    } else {
-      e--;
-      ans *= b_;
-      ans %= mod;
-    }
+  // Constructor
+  ModInt(long long v = 0) {
+    value = int(v % mod);
+    if (value < 0) value += mod;
   }
-  b_ *= ans;
-  b_ %= mod;
-  b = b_;
-  return b;
-} // working
 
-void add_mod(int &a, int b) {
-  long long a_ = a;
-  a_ += b;
-  a_ %= mod;
-  a = a_;
-} // working
+  // Set modulus (use this once before any operations if a different mod is needed)
+  static void set_mod(int m) {
+    mod = m;
+  }
 
-void mul_mod(int &a, int b) {
-  long long a_ = a;
-  a_ *= b;
-  a_ %= mod;
-  a = a_;
-}
+  // Power function to handle division using modular inverse
+  static int bin_power(int base, int exp) {
+    int result = 1;
+    while (exp > 0) {
+      if (exp % 2 == 1) result = (1LL * result * base) % mod;
+      base = (1LL * base * base) % mod;
+      exp /= 2;
+    }
+    return result;
+  }
 
-void sub_mod(int &a, int b) {
-  long long a_ = a;
-  long long b_ = b;
-  a_ -= b_;
-  a_ %= mod;
-  a_ += mod;
-  a_ %= mod;
-  a = a_;
-}
+  // Overloaded operators for modular arithmetic
+  ModInt& operator+=(const ModInt& other) {
+    value += other.value;
+    if (value >= mod) value -= mod;
+    return *this;
+  }
 
-void div_mod(int &a, int b) {
-  // a * b^-1
-  int inv_b = bin_power(b, mod - 2);
-  mul_mod(a, inv_b);
-} // check all working?
+  ModInt& operator-=(const ModInt& other) {
+    value -= other.value;
+    if (value < 0) value += mod;
+    return *this;
+  }
+
+  ModInt& operator*=(const ModInt& other) {
+    value = int((1LL * value * other.value) % mod);
+    return *this;
+  }
+
+  ModInt& operator/=(const ModInt& other) {
+    return *this *= ModInt(bin_power(other.value, mod - 2));
+  }
+
+  // Binary operators
+  friend ModInt operator+(ModInt a, const ModInt& b) { return a += b; }
+  friend ModInt operator-(ModInt a, const ModInt& b) { return a -= b; }
+  friend ModInt operator*(ModInt a, const ModInt& b) { return a *= b; }
+  friend ModInt operator/(ModInt a, const ModInt& b) { return a /= b; }
+
+  // Stream output
+  friend ostream& operator<<(ostream& out, const ModInt& m) {
+    return out << m.value;
+  }
+};
+
+// Define the static member outside the struct
+int ModInt::mod = 1E9 + 7;  // Default mod value
 
 int main() {
   ios::sync_with_stdio(false);
   cin.tie(0);
-  cout << bin_power(2, 2) << '\n';
+
+  // Set a custom modulus if needed
+  // ModInt::set_mod(1E9 + 7);
+
+  ModInt a = 10, b = 20;
+  cout << "a + b = " << (a + b) << '\n';
+  cout << "a - b = " << (a - b) << '\n';
+  cout << "a * b = " << (a * b) << '\n';
+  cout << "a / b = " << (a / b) << '\n';
+
   return 0;
 }
